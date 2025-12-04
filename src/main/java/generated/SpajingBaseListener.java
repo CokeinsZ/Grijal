@@ -31,6 +31,42 @@ public class SpajingBaseListener implements SpajingListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFuncion(SpajingParser.FuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncion(SpajingParser.FuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParametros(SpajingParser.ParametrosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParametros(SpajingParser.ParametrosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParametro(SpajingParser.ParametroContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParametro(SpajingParser.ParametroContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBloque(SpajingParser.BloqueContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -122,6 +158,42 @@ public class SpajingBaseListener implements SpajingListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitMostrar(SpajingParser.MostrarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArgumentos(SpajingParser.ArgumentosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArgumentos(SpajingParser.ArgumentosContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRetorno(SpajingParser.RetornoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRetorno(SpajingParser.RetornoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -230,6 +302,18 @@ public class SpajingBaseListener implements SpajingListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOrExpr(SpajingParser.OrExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLlamadaExpr(SpajingParser.LlamadaExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLlamadaExpr(SpajingParser.LlamadaExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

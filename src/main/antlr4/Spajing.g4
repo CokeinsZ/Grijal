@@ -6,7 +6,19 @@ package generated;
 
 // Reglas del parser
 programa
-    : CLASE ID ':' bloque FIN EOF
+    : CLASE ID ':' funcion+ FIN EOF
+    ;
+
+funcion
+    : FUNCION ID '(' parametros? ')' ':' bloque FIN_CONDICIONAL
+    ;
+
+parametros
+    : parametro (',' parametro)*
+    ;
+
+parametro
+    : tipo ID
     ;
 
 bloque
@@ -19,6 +31,8 @@ sentencia
     | condicional
     | bucle
     | mostrar
+    | llamadaFuncion
+    | retorno
     ;
 
 declaracion
@@ -48,6 +62,18 @@ mostrar
     : MOSTRAR '(' expresion ')' ';'
     ;
 
+llamadaFuncion
+    : ID '(' argumentos? ')' ';'
+    ;
+
+argumentos
+    : expresion (',' expresion)*
+    ;
+
+retorno
+    : RETORNAR expresion ';'
+    ;
+
 expresion
     : expresion op=('*'|'/'|'%') expresion      # Multiplicacion
     | expresion op=('+'|'-') expresion          # Adicion
@@ -56,6 +82,7 @@ expresion
     | expresion OR expresion                    # OrExpr
     | NOT expresion                             # NotExpr
     | '(' expresion ')'                         # Parentesis
+    | ID '(' argumentos? ')'                    # LlamadaExpr
     | literal                                   # LiteralExpr
     | ID                                        # IdExpr
     ;
@@ -69,6 +96,8 @@ literal
 
 // Tokens - PALABRAS RESERVADAS
 CLASE: 'Clase';
+FUNCION: 'funcion';
+RETORNAR: 'retornar';
 PREGUNTA: 'pregunta';
 SINO: 'sino';
 MIENTRAS: 'mientras';

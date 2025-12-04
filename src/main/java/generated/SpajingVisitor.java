@@ -19,6 +19,24 @@ public interface SpajingVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrograma(SpajingParser.ProgramaContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link SpajingParser#funcion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncion(SpajingParser.FuncionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpajingParser#parametros}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParametros(SpajingParser.ParametrosContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpajingParser#parametro}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParametro(SpajingParser.ParametroContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SpajingParser#bloque}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -66,6 +84,24 @@ public interface SpajingVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitMostrar(SpajingParser.MostrarContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpajingParser#llamadaFuncion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpajingParser#argumentos}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArgumentos(SpajingParser.ArgumentosContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SpajingParser#retorno}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRetorno(SpajingParser.RetornoContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code AndExpr}
 	 * labeled alternative in {@link SpajingParser#expresion}.
@@ -129,6 +165,13 @@ public interface SpajingVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOrExpr(SpajingParser.OrExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code LlamadaExpr}
+	 * labeled alternative in {@link SpajingParser#expresion}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLlamadaExpr(SpajingParser.LlamadaExprContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link SpajingParser#literal}.
 	 * @param ctx the parse tree

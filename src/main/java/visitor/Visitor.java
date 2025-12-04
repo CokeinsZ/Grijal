@@ -3,16 +3,131 @@ package visitor;
 import generated.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Visitor extends SpajingBaseVisitor<Object> {
-    private Map<String, Object> memoria = new HashMap<>();
-    private Map<String, String> tipos = new HashMap<>();
+    private Map<String, Object> memoriaGlobal = new HashMap<>();
+    private Map<String, String> tiposGlobales = new HashMap<>();
+    private Map<String, Object> memoriaLocal = new HashMap<>();
+    private Map<String, String> tiposLocales = new HashMap<>();
+    private Map<String, SpajingParser.FuncionContext> funciones = new HashMap<>();
+    private boolean enFuncion = false;
+    
+    // Clase para manejar retornos
+    private static class RetornoException extends RuntimeException {
+        public final Object valor;
+        public RetornoException(Object valor) {
+            this.valor = valor;
+        }
+    }
 
     @Override
     public Object visitPrograma(SpajingParser.ProgramaContext ctx) {
         String nombreClase = ctx.ID().getText();
         System.out.println("Ejecutando clase: " + nombreClase);
-        return visit(ctx.bloque());
+        
+        // Registrar todas las funciones
+        for (SpajingParser.FuncionContext funcion : ctx.funcion()) {
+            String nombreFuncion = funcion.ID().getText();
+            funciones.put(nombreFuncion, funcion);
+        }
+        
+        // Verificar que existe la función principal
+        if (!funciones.containsKey("principal")) {
+            throw new RuntimeException("Error: Debe existir una función llamada 'principal'");
+        }
+        
+        // Ejecutar la función principal
+        return ejecutarFuncion("principal", new ArrayList<>());
+    }
+
+    private Object ejecutarFuncion(String nombre, List<Object> argumentos) {
+        SpajingParser.FuncionContext funcion = funciones.get(nombre);
+        if (funcion == null) {
+            throw new RuntimeException("Función no definida: " + nombre);
+        }
+        
+        // Guardar estado anterior
+        Map<String, Object> memoriaAnterior = new HashMap<>(memoriaLocal);
+        Map<String, String> tiposAnteriores = new HashMap<>(tiposLocales);
+        boolean enFuncionAnterior = enFuncion;
+        
+        // Limpiar memoria local para la nueva función
+        memoriaLocal.clear();
+        tiposLocales.clear();
+        enFuncion = true;
+        
+        // Procesar parámetros
+        if (funcion.parametros() != null) {
+            List<SpajingParser.ParametroContext> params = funcion.parametros().parametro();
+            if (params.size() != argumentos.size()) {
+                throw new RuntimeException("La función '" + nombre + "' espera " + params.size() + 
+                    " argumentos, pero se recibieron " + argumentos.size());
+            }
+            for (int i = 0; i < params.size(); i++) {
+                String nombreParam = params.get(i).ID().getText();
+                String tipoParam = params.get(i).tipo().getText();
+                Object valorArg = argumentos.get(i);
+                validarTipo(tipoParam, valorArg, nombreParam);
+                memoriaLocal.put(nombreParam, valorArg);
+                tiposLocales.put(nombreParam, tipoParam);
+            }
+        }
+        
+        Object resultado = null;
+        try {
+            visit(funcion.bloque());
+        } catch (RetornoException e) {
+            resultado = e.valor;
+        }
+        
+        // Restaurar estado anterior
+        memoriaLocal = memoriaAnterior;
+        tiposLocales = tiposAnteriores;
+        enFuncion = enFuncionAnterior;
+        
+        return resultado;
+    }
+
+    @Override
+    public Object visitFuncion(SpajingParser.FuncionContext ctx) {
+        // Las funciones se ejecutan cuando son llamadas, no cuando se visitan
+        return null;
+    }
+
+    @Override
+    public Object visitLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx) {
+        String nombre = ctx.ID().getText();
+        List<Object> args = new ArrayList<>();
+        
+        if (ctx.argumentos() != null) {
+            for (SpajingParser.ExpresionContext expr : ctx.argumentos().expresion()) {
+                args.add(visit(expr));
+            }
+        }
+        
+        return ejecutarFuncion(nombre, args);
+    }
+
+    @Override
+    public Object visitLlamadaExpr(SpajingParser.LlamadaExprContext ctx) {
+        String nombre = ctx.ID().getText();
+        List<Object> args = new ArrayList<>();
+        
+        if (ctx.argumentos() != null) {
+            for (SpajingParser.ExpresionContext expr : ctx.argumentos().expresion()) {
+                args.add(visit(expr));
+            }
+        }
+        
+        return ejecutarFuncion(nombre, args);
+    }
+
+    @Override
+    public Object visitRetorno(SpajingParser.RetornoContext ctx) {
+        Object valor = visit(ctx.expresion());
+        throw new RetornoException(valor);
     }
 
     @Override
@@ -33,8 +148,13 @@ public class Visitor extends SpajingBaseVisitor<Object> {
         // Validación de tipo
         validarTipo(tipo, valor, nombre);
         
-        memoria.put(nombre, valor);
-        tipos.put(nombre, tipo);
+        if (enFuncion) {
+            memoriaLocal.put(nombre, valor);
+            tiposLocales.put(nombre, tipo);
+        } else {
+            memoriaGlobal.put(nombre, valor);
+            tiposGlobales.put(nombre, tipo);
+        }
         return null;
     }
 
@@ -43,14 +163,19 @@ public class Visitor extends SpajingBaseVisitor<Object> {
         String nombre = ctx.ID().getText();
         Object valor = visit(ctx.expresion());
         
-        if (!memoria.containsKey(nombre)) {
+        // Buscar primero en local, luego en global
+        if (memoriaLocal.containsKey(nombre)) {
+            String tipo = tiposLocales.get(nombre);
+            validarTipo(tipo, valor, nombre);
+            memoriaLocal.put(nombre, valor);
+        } else if (memoriaGlobal.containsKey(nombre)) {
+            String tipo = tiposGlobales.get(nombre);
+            validarTipo(tipo, valor, nombre);
+            memoriaGlobal.put(nombre, valor);
+        } else {
             throw new RuntimeException("Variable no declarada: " + nombre);
         }
         
-        String tipo = tipos.get(nombre);
-        validarTipo(tipo, valor, nombre);
-        
-        memoria.put(nombre, valor);
         return null;
     }
 
@@ -207,10 +332,15 @@ public class Visitor extends SpajingBaseVisitor<Object> {
     @Override
     public Object visitIdExpr(SpajingParser.IdExprContext ctx) {
         String nombre = ctx.ID().getText();
-        if (!memoria.containsKey(nombre)) {
-            throw new RuntimeException("Variable no declarada: " + nombre);
+        
+        // Buscar primero en local, luego en global
+        if (memoriaLocal.containsKey(nombre)) {
+            return memoriaLocal.get(nombre);
+        } else if (memoriaGlobal.containsKey(nombre)) {
+            return memoriaGlobal.get(nombre);
         }
-        return memoria.get(nombre);
+        
+        throw new RuntimeException("Variable no declarada: " + nombre);
     }
 
     @Override

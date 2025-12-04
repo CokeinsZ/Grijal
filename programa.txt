@@ -1,30 +1,47 @@
 Clase MiPrograma:
-    // Declaración de variables
-    entero x --: 10;
-    entero num --: 20;
-    real pi --: 3.14;
-    texto mensaje --: "Hola Mundo";
-    logico activo --: verdadero;
-    
-    // Mostrar valores
-    mostrar(x);
-    mostrar(num);
-    mostrar(x + num);
-    mostrar(mensaje);
-    
-    // Condicional
-    pregunta x > 5:
-        mostrar("x es mayor que 5");
-    sino:
-        mostrar("x es menor o igual a 5");
+    // Función que suma dos números
+    funcion sumar(entero a, entero b):
+        retornar a + b;
     fin
     
-    // Bucle
-    entero contador --: 0;
-    mientras contador < 3:
-        mostrar(contador);
-        contador --: contador + 1;
+    // Función que muestra un saludo
+    funcion saludar():
+        mostrar("Hola desde la función saludar!");
     fin
     
-    mostrar("Fin del programa");
+    // Función principal (obligatoria)
+    funcion principal():
+        // Declaración de variables
+        entero x --: 10;
+        entero num --: 20;
+        real pi --: 3.14;
+        texto mensaje --: "Hola Mundo";
+        logico activo --: verdadero;
+        
+        // Mostrar valores
+        mostrar(x);
+        mostrar(num);
+        mostrar(mensaje);
+        
+        // Llamar a funciones
+        saludar();
+        entero resultado --: sumar(x, num);
+        mostrar(resultado);
+        
+        // Condicional
+        pregunta x > 5:
+            mostrar("x es mayor que 5");
+        sino:
+            mostrar("x es menor o igual a 5");
+        fin
+        
+        // Bucle
+        entero contador --: 0;
+        mientras contador < 3:
+            mostrar(contador);
+            contador --: contador + 1;
+        fin
+        
+        mostrar("Fin del programa");
+    fin
 Fin

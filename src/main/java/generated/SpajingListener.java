@@ -20,6 +20,36 @@ public interface SpajingListener extends ParseTreeListener {
 	 */
 	void exitPrograma(SpajingParser.ProgramaContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link SpajingParser#funcion}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncion(SpajingParser.FuncionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#funcion}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncion(SpajingParser.FuncionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpajingParser#parametros}.
+	 * @param ctx the parse tree
+	 */
+	void enterParametros(SpajingParser.ParametrosContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#parametros}.
+	 * @param ctx the parse tree
+	 */
+	void exitParametros(SpajingParser.ParametrosContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpajingParser#parametro}.
+	 * @param ctx the parse tree
+	 */
+	void enterParametro(SpajingParser.ParametroContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#parametro}.
+	 * @param ctx the parse tree
+	 */
+	void exitParametro(SpajingParser.ParametroContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SpajingParser#bloque}.
 	 * @param ctx the parse tree
 	 */
@@ -99,6 +129,36 @@ public interface SpajingListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitMostrar(SpajingParser.MostrarContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpajingParser#llamadaFuncion}.
+	 * @param ctx the parse tree
+	 */
+	void enterLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#llamadaFuncion}.
+	 * @param ctx the parse tree
+	 */
+	void exitLlamadaFuncion(SpajingParser.LlamadaFuncionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpajingParser#argumentos}.
+	 * @param ctx the parse tree
+	 */
+	void enterArgumentos(SpajingParser.ArgumentosContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#argumentos}.
+	 * @param ctx the parse tree
+	 */
+	void exitArgumentos(SpajingParser.ArgumentosContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SpajingParser#retorno}.
+	 * @param ctx the parse tree
+	 */
+	void enterRetorno(SpajingParser.RetornoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SpajingParser#retorno}.
+	 * @param ctx the parse tree
+	 */
+	void exitRetorno(SpajingParser.RetornoContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code AndExpr}
 	 * labeled alternative in {@link SpajingParser#expresion}.
@@ -207,6 +267,18 @@ public interface SpajingListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOrExpr(SpajingParser.OrExprContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code LlamadaExpr}
+	 * labeled alternative in {@link SpajingParser#expresion}.
+	 * @param ctx the parse tree
+	 */
+	void enterLlamadaExpr(SpajingParser.LlamadaExprContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code LlamadaExpr}
+	 * labeled alternative in {@link SpajingParser#expresion}.
+	 * @param ctx the parse tree
+	 */
+	void exitLlamadaExpr(SpajingParser.LlamadaExprContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link SpajingParser#literal}.
 	 * @param ctx the parse tree
