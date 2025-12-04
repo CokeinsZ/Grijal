@@ -23,31 +23,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <!-- Plugin de ANTLR -->
-            <plugin>
-                <groupId>org.antlr</groupId>
-                <artifactId>antlr4-maven-plugin</artifactId>
-                <version>4.13.1</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>antlr4</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>
-                                <argument>-visitor</argument>
-                                <argument>-listener</argument>
-                                <argument>-package</argument>
-                                <argument>visitor</argument>
-                            </arguments>
-                            <outputDirectory>${project.build.directory}/generated-sources/antlr4</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
